@@ -1,0 +1,103 @@
+body {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #f0f0ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  width: 100%;
+}
+h1,
+h2 {
+  color: #ff6b6b;
+  text-align: center;
+  margin-bottom: 20px;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  border: 2px solid #4ecdc4;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+button {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 10px auto;
+}
+button:hover {
+  background-color: #ff8787;
+}
+#ticketContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.ticket {
+  background-color: #fffacd;
+  border: 2px dashed #ff6b6b;
+  border-radius: 10px;
+  padding: 10px;
+  width: 120px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s,
+    background-color 0.3s;
+}
+.ticket:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.ticket.highlight {
+  background-color: #ffd700;
+  border-color: #ffa500;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+#winnerResult {
+  font-weight: bold;
+  text-align: center;
+  font-size: 36px;
+  color: #ff6b6b;
+  padding: 20px;
+  background-color: #fffacd;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+/* Toggle container */
+.toggle-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}

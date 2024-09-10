@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fun Raffle Ticket Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎫 Mr Luther's Raffle Ticket Generator 🎫</h1>
+      <textarea
+        id="inputText"
+        placeholder="Paste your ticket info here..."
+      ></textarea>
+
+      <!-- Toggle for random or block order -->
+      <div class="toggle-container">
+        <label for="randomToggle">Generate Tickets in Random Order:</label>
+        <input type="checkbox" id="randomToggle" />
+      </div>
+
+      <button onclick="generateTickets()">Generate Tickets!</button>
+      <div id="ticketContainer"></div>
+      <button
+        onclick="startWinnerSelection()"
+        id="pickWinnerBtn"
+        style="display: none"
+      >
+        Pick a Winner!
+      </button>
+      <div id="winnerResult" class="hidden"></div>
+    </div>
+
+    <audio id="drumrollSound" src="drumroll.m4a" preload="auto"></audio>
+    <!-- I made it a single sound with the winner sound at the end, this can be re-enabled if I want to go back that way -->
+    <!-- <audio
+      id="winnerSound"
+      src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"
+      preload="auto"
+    ></audio> -->
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
