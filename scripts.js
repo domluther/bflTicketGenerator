@@ -46,6 +46,8 @@ function generateTickets() {
     ticketHtml || 'No valid ticket information found.';
   document.getElementById('pickWinnerBtn').style.display =
     participants.length > 0 ? 'block' : 'none';
+
+  displayTicketSummary(); // Display ticket summary after generating tickets
 }
 
 // Function to shuffle an array
@@ -109,4 +111,79 @@ function pickWinner() {
   });
 
   document.getElementById('pickWinnerBtn').disabled = false;
+}
+
+// Not very pretty so called but not shown for now
+function displayTicketSummary() {
+  const totalTickets = tickets.length;
+  let summaryHtml = `Total Tickets: ${totalTickets}<br>`;
+  participants.forEach((participant) => {
+    summaryHtml += `${participant.name} : ${participant.tickets} tickets<br>`;
+  });
+  document.getElementById('ticketSummary').innerHTML = summaryHtml;
+}
+
+// Need to update so the same person can't win multiple times
+function pickWinners() {
+  const winnerCount = parseInt(document.getElementById('winnerCount').value);
+  const winners = [];
+  const ticketElements = document.querySelectorAll('.ticket');
+
+  for (let i = 0; i < winnerCount; i++) {
+    const winningTicket = Math.floor(Math.random() * tickets.length);
+    winners.push(tickets[winningTicket]);
+  }
+
+  let winnerHtml = '<h2>🎉 Winners! 🎉</h2>';
+  winners.forEach((winnerName) => {
+    winnerHtml += `${winnerName}<br>`;
+
+    // Highlight winning tickets
+    ticketElements.forEach((ticket) => {
+      if (ticket.textContent === winnerName) {
+        ticket.style.backgroundColor = '#90EE90';
+        ticket.style.borderColor = '#32CD32';
+        ticket.classList.add('highlight');
+      }
+    });
+  });
+
+  const winnerElement = document.getElementById('winnerResult');
+  winnerElement.classList.remove('hidden');
+  winnerElement.innerHTML = winnerHtml;
+
+  document.getElementById('pickWinnerBtn').disabled = false;
+}
+
+// Can be a bit glitchy - can still have a person highlighted in yellow even after the winners are picked
+function enhancedAnimation() {
+  const ticketElements = document.querySelectorAll('.ticket');
+  let count = 0;
+  const animationDuration = 5700;
+  let intervalDuration = 200;
+
+  drumrollSound.play();
+
+  const animationInterval = setInterval(() => {
+    ticketElements.forEach((ticket) => ticket.classList.remove('highlight'));
+    const randomIndex = Math.floor(Math.random() * tickets.length);
+    ticketElements[randomIndex].classList.add('highlight');
+    count += intervalDuration;
+
+    // Dynamic animation speed changes for enhanced effect
+    if (count < animationDuration / 2) {
+      intervalDuration = 100; // Speed up in the middle
+    } else if (count > animationDuration / 1.5) {
+      intervalDuration = 300; // Slow down towards the end
+    }
+
+    if (count >= animationDuration) {
+      clearInterval(animationInterval);
+      pickWinners();
+    }
+  }, intervalDuration);
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme');
 }

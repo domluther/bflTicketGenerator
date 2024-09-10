@@ -8,7 +8,11 @@
   </head>
   <body>
     <div class="container">
+      <!-- Theme toggle button -->
+      <button onclick="toggleTheme()">Toggle Theme</button>
+
       <h1>🎫 Mr Luther's Raffle Ticket Generator 🎫</h1>
+
       <textarea
         id="inputText"
         placeholder="Paste your ticket info here..."
@@ -20,6 +24,16 @@
         <input type="checkbox" id="randomToggle" />
       </div>
 
+      <!-- Number of winners input - to add later maybe -->
+      <!-- <label for="winnerCount">Number of winners:</label>
+      <input
+        type="number"
+        id="winnerCount"
+        value="1"
+        min="1"
+        style="margin-bottom: 10px"
+      /><br /> -->
+
       <button onclick="generateTickets()">Generate Tickets!</button>
       <div id="ticketContainer"></div>
       <button
@@ -29,6 +43,10 @@
       >
         Pick a Winner!
       </button>
+
+      <!-- <div id="ticketSummary"></div> -->
+      <!-- Ticket summary section -->
+
       <div id="winnerResult" class="hidden"></div>
     </div>
 

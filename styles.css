@@ -101,3 +101,28 @@ button:hover {
 .hidden {
   display: none;
 }
+
+/* Dark theme styles */
+.dark-theme {
+  background-color: #333;
+  color: white;
+}
+.dark-theme .container {
+  background-color: #444;
+  color: white;
+}
+.dark-theme button {
+  background-color: #555;
+  color: white;
+}
+.dark-theme button:hover {
+  background-color: #777;
+}
+.dark-theme .ticket {
+  background-color: #555;
+  border-color: #888;
+}
+.dark-theme .ticket.highlight {
+  background-color: #ff8c00;
+  border-color: #ff4500;
+}
