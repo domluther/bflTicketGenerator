@@ -126,3 +126,147 @@ button:hover {
   background-color: #ff8c00;
   border-color: #ff4500;
 }
+
+/* Update the existing mode-selection CSS */
+.mode-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mode-selection .mode-label {
+  margin-right: 10px;
+}
+
+.mode-selection label {
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.mode-selection input[type='radio'] {
+  margin-right: 5px;
+}
+
+/* Update this in your existing CSS if you want to keep consistent styling */
+.dark-theme .mode-selection {
+  color: white;
+}
+
+#pickAgainBtn {
+  background-color: #4ecdc4;
+}
+
+#pickAgainBtn:hover {
+  background-color: #45b7ae;
+}
+
+.dark-theme #pickAgainBtn {
+  background-color: #3a9d95;
+}
+
+.dark-theme #pickAgainBtn:hover {
+  background-color: #338880;
+}
+
+#toggleVisualisationBtn {
+  background-color: #4a90e2;
+  margin-top: 20px;
+}
+
+#toggleVisualisationBtn:hover {
+  background-color: #3a7bc8;
+}
+
+#visualisationContainer {
+  margin-top: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark-theme #toggleVisualisationBtn {
+  background-color: #3a7bc8;
+}
+
+.dark-theme #toggleVisualisationBtn:hover {
+  background-color: #2a6cb8;
+}
+
+/* Add these new styles and modify existing ones as needed */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.control-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.mode-selection,
+.toggle-container {
+  margin: 10px 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.primary-btn {
+  background-color: #4ecdc4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.primary-btn:hover {
+  background-color: #45b7ae;
+}
+
+#VisualisationContainer {
+  margin-top: 20px;
+  max-width: 100%;
+}
+
+#ticketContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ticket {
+  background-color: #fffacd;
+  border: 2px dashed #ff6b6b;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+/* Dark theme adjustments */
+.dark-theme .primary-btn {
+  background-color: #3a9d95;
+}
+
+.dark-theme .primary-btn:hover {
+  background-color: #338880;
+}

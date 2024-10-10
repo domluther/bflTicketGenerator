@@ -5,58 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fun Raffle Ticket Generator</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/img/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/img/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/img/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/img/site.webmanifest" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="container">
-      <!-- Theme toggle button -->
-      <button onclick="toggleTheme()">Toggle Theme</button>
+      <button onclick="toggleTheme()" class="theme-toggle">Toggle Theme</button>
 
       <h1>🎫 Mr Luther's Raffle Ticket Generator 🎫</h1>
+
+      <div class="control-panel">
+        <div class="mode-selection">
+          <span class="mode-label"><strong>Mode:</strong></span>
+          <label>
+            <input type="radio" name="mode" value="bfl" checked /> BFL
+          </label>
+          <label>
+            <input type="radio" name="mode" value="house" /> House Points
+          </label>
+        </div>
+
+        <div class="toggle-container">
+          <label for="showTicketsToggle">
+            <input type="checkbox" id="showTicketsToggle" checked />
+            Show Tickets
+          </label>
+        </div>
+        <div class="toggle-container">
+          <label for="randomToggle">
+            <input type="checkbox" id="randomToggle" />
+            Random Ticket Order
+          </label>
+        </div>
+      </div>
 
       <textarea
         id="inputText"
         placeholder="Paste your ticket info here..."
       ></textarea>
 
-      <!-- Toggle for random or block order -->
-      <div class="toggle-container">
-        <label for="randomToggle">Generate Tickets in Random Order:</label>
-        <input type="checkbox" id="randomToggle" />
+      <div class="button-container">
+        <button onclick="generateTickets()" class="primary-btn">
+          Generate Tickets
+        </button>
+        <button
+          onclick="startWinnerSelection()"
+          id="pickWinnerBtn"
+          style="display: none"
+          class="primary-btn"
+        >
+          Pick a Winner!
+        </button>
+        <button
+          onclick="pickAgain()"
+          id="pickAgainBtn"
+          style="display: none"
+          class="primary-btn"
+        >
+          Pick Again!
+        </button>
       </div>
 
-      <!-- Number of winners input - to add later maybe -->
-      <!-- <label for="winnerCount">Number of winners:</label>
-      <input
-        type="number"
-        id="winnerCount"
-        value="1"
-        min="1"
-        style="margin-bottom: 10px"
-      /><br /> -->
-
-      <button onclick="generateTickets()">Generate Tickets!</button>
-      <div id="ticketContainer"></div>
-      <button
-        onclick="startWinnerSelection()"
-        id="pickWinnerBtn"
-        style="display: none"
-      >
-        Pick a Winner!
-      </button>
-
-      <!-- <div id="ticketSummary"></div> -->
-      <!-- Ticket summary section -->
+      <div id="visualisationContainer" style="display: none">
+        <canvas id="ticketChart"></canvas>
+      </div>
 
       <div id="winnerResult" class="hidden"></div>
+
+      <div id="ticketContainer"></div>
     </div>
 
     <audio id="drumrollSound" src="drumroll.m4a" preload="auto"></audio>
-    <!-- I made it a single sound with the winner sound at the end, this can be re-enabled if I want to go back that way -->
-    <!-- <audio
-      id="winnerSound"
-      src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"
-      preload="auto"
-    ></audio> -->
 
     <script src="scripts.js"></script>
   </body>

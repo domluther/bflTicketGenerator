@@ -1,5 +1,8 @@
 let participants = [];
 let tickets = [];
+let winners = [];
+let chart = null;
+
 const drumrollSound = document.getElementById('drumrollSound');
 const winnerSound = document.getElementById('winnerSound');
 
@@ -7,22 +10,33 @@ function generateTickets() {
   const input = document.getElementById('inputText').value;
   const lines = input.split('\n');
   const randomOrder = document.getElementById('randomToggle').checked; // Check toggle state
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+
   participants = [];
   tickets = [];
 
   lines.forEach((line) => {
     if (line.trim() !== '') {
-      // Split the line by tabs (\t) and trim whitespace
       const parts = line.split('\t').map((part) => part.trim());
-      if (parts.length === 3) {
+
+      if (mode === 'bfl' && parts.length === 3) {
         const [lastName, firstName] = parts[0]
           .split(',')
           .map((name) => name.trim());
-        const classGroup = parts[1]; // Class (e.g., '07S')
-        const ticketCount = parseInt(parts[2]); // Number of tickets
+        const classGroup = parts[1];
+        const ticketCount = parseInt(parts[2]);
 
         const name = `${firstName} ${lastName}`;
         participants.push({ name: name, tickets: ticketCount, classGroup });
+
+        for (let i = 0; i < ticketCount; i++) {
+          tickets.push(name);
+        }
+      } else if (mode === 'house' && parts.length === 2) {
+        const name = parts[0];
+        const ticketCount = parseInt(parts[1]);
+
+        participants.push({ name: name, tickets: ticketCount });
 
         for (let i = 0; i < ticketCount; i++) {
           tickets.push(name);
@@ -44,10 +58,20 @@ function generateTickets() {
 
   document.getElementById('ticketContainer').innerHTML =
     ticketHtml || 'No valid ticket information found.';
-  document.getElementById('pickWinnerBtn').style.display =
-    participants.length > 0 ? 'block' : 'none';
 
-  displayTicketSummary(); // Display ticket summary after generating tickets
+  if (ticketHtml != '') {
+    document.getElementById('pickWinnerBtn').style.display =
+      participants.length > 0 ? 'block' : 'none';
+
+    toggleTicketDisplay(); // Call this to respect the current toggle state
+
+    document.getElementById('pickWinnerBtn').style.display = 'block';
+    document.getElementById('pickAgainBtn').style.display = 'none';
+    winners = []; // Reset winners when generating new tickets
+
+    updateVisualisation();
+    toggleVisualisation();
+  }
 }
 
 // Function to shuffle an array
@@ -64,7 +88,7 @@ function startWinnerSelection() {
   const ticketElements = document.querySelectorAll('.ticket');
   let count = 0;
   const animationDuration = 5700; // how long to animate for
-  const intervalDuration = 200; // 0.1 second per highlight
+  const intervalDuration = 200; // 0.2 second per highlight
 
   drumrollSound.play();
 
@@ -76,9 +100,6 @@ function startWinnerSelection() {
 
     if (count >= animationDuration) {
       clearInterval(animationInterval);
-      // No longer play 2 sounds, all a single sound
-      // drumrollSound.pause();
-      // drumrollSound.currentTime = 0;
       pickWinner();
     }
   }, intervalDuration);
@@ -88,18 +109,18 @@ function pickWinner() {
   const winningTicket = Math.floor(Math.random() * tickets.length);
   const winnerName = tickets[winningTicket];
 
-  // All a single sound - so not this any more
-  // winnerSound.play();
+  winners.push(winnerName);
 
   const winnerElement = document.getElementById('winnerResult');
   winnerElement.classList.remove('hidden');
   winnerElement.innerHTML = `
     <h2>🎉 Winner! 🎉</h2>
-    ${winnerName}
+    ${winners.join('<br>')}
   `;
 
   // Highlight winning tickets
   const ticketElements = document.querySelectorAll('.ticket');
+  tickets = tickets.filter((ticket) => ticket !== winnerName);
   ticketElements.forEach((ticket) => {
     if (ticket.textContent === winnerName) {
       ticket.style.backgroundColor = '#90EE90';
@@ -111,6 +132,10 @@ function pickWinner() {
   });
 
   document.getElementById('pickWinnerBtn').disabled = false;
+  document.getElementById('pickAgainBtn').style.display =
+    tickets.length > 0 ? 'block' : 'none';
+
+  updateVisualisation();
 }
 
 // Not very pretty so called but not shown for now
@@ -155,6 +180,15 @@ function pickWinners() {
   document.getElementById('pickWinnerBtn').disabled = false;
 }
 
+function pickAgain() {
+  if (tickets.length > 0) {
+    startWinnerSelection();
+  } else {
+    alert('All tickets have been drawn!');
+    document.getElementById('pickAgainBtn').style.display = 'none';
+  }
+}
+
 // Can be a bit glitchy - can still have a person highlighted in yellow even after the winners are picked
 function enhancedAnimation() {
   const ticketElements = document.querySelectorAll('.ticket');
@@ -187,3 +221,71 @@ function enhancedAnimation() {
 function toggleTheme() {
   document.body.classList.toggle('dark-theme');
 }
+
+function updateVisualisation() {
+  const ctx = document.getElementById('ticketChart').getContext('2d');
+
+  const data = participants.map((p) => ({
+    name: p.name,
+    tickets: p.tickets,
+  }));
+
+  data.sort((a, b) => b.tickets - a.tickets);
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: data.map((p) => p.name),
+      datasets: [
+        {
+          data: data.map((p) => p.tickets),
+          backgroundColor: generateColors(data.length),
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'right',
+        },
+        title: {
+          display: true,
+          text: 'Number of tickets',
+        },
+      },
+    },
+  });
+}
+
+function generateColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    const hue = (i * 137.508) % 360; // Use golden angle approximation
+    colors.push(`hsl(${hue}, 70%, 60%)`);
+  }
+  return colors;
+}
+
+function toggleVisualisation() {
+  const container = document.getElementById('visualisationContainer');
+  container.style.display =
+    container.style.display === 'none' ? 'block' : 'none';
+  updateVisualisation();
+}
+
+function toggleTicketDisplay() {
+  const showTickets = document.getElementById('showTicketsToggle').checked;
+  const ticketContainer = document.getElementById('ticketContainer');
+  ticketContainer.style.display = showTickets ? 'flex' : 'none';
+}
+
+document
+  .getElementById('showTicketsToggle')
+  .addEventListener('change', toggleTicketDisplay);
+
+toggleTicketDisplay();
