@@ -48,12 +48,6 @@
             Show Tickets
           </label>
         </div>
-        <div class="toggle-container">
-          <label for="randomToggle">
-            <input type="checkbox" id="randomToggle" />
-            Random Ticket Order
-          </label>
-        </div>
       </div>
 
       <textarea
@@ -73,21 +67,13 @@
         >
           Pick a Winner!
         </button>
-        <button
-          onclick="pickAgain()"
-          id="pickAgainBtn"
-          style="display: none"
-          class="primary-btn"
-        >
-          Pick Again!
-        </button>
       </div>
-
-      <div id="visualisationContainer" style="display: none">
-        <canvas id="ticketChart"></canvas>
-      </div>
-
       <div id="winnerResult" class="hidden"></div>
+
+      <div id="visualisationContainer" style="display">
+        <!-- <canvas id="ticketChart"></canvas> -->
+        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+      </div>
 
       <div id="ticketContainer"></div>
     </div>
