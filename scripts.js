@@ -93,13 +93,26 @@ function generateTickets() {
   updateWheelSegments();
 }
 
-function startWinnerSelection() {
+function selectAndAnimateWinner() {
   if (tickets.length === 0) {
     alert('All tickets have been drawn!');
     return;
   }
 
   document.getElementById('pickWinnerBtn').disabled = true;
+
+  // Select the winner using tickets
+  const winningTicket = Math.floor(Math.random() * tickets.length);
+  const winnerName = tickets[winningTicket];
+
+  // Start the ticket highlight animation
+  animateTicketSelection(winnerName);
+
+  // Start the wheel spin animation
+  spinWheel(winnerName);
+}
+
+function animateTicketSelection(winnerName) {
   const ticketElements = document.querySelectorAll('.ticket');
   let count = 0;
   const animationDuration = 5700;
@@ -115,15 +128,59 @@ function startWinnerSelection() {
 
     if (count >= animationDuration) {
       clearInterval(animationInterval);
-      pickWinner();
+      finalizeWinner(winnerName);
     }
   }, intervalDuration);
 }
 
-function pickWinner() {
-  const winningTicket = Math.floor(Math.random() * tickets.length);
-  const winnerName = tickets[winningTicket];
+function spinWheel(winnerName) {
+  if (spinning) return;
 
+  spinning = true;
+  let start = performance.now();
+
+  function animateSpin(time) {
+    let elapsed = time - start;
+    let progress = elapsed / spinDuration;
+
+    angle += spinSpeed * (1 - progress);
+    spinSpeed *= spinAcceleration;
+
+    drawWheel();
+
+    if (elapsed < spinDuration) {
+      requestAnimationFrame(animateSpin);
+    } else {
+      spinning = false;
+      // Ensure the wheel lands on the pre-selected winner
+      adjustWheelToWinner(winnerName);
+    }
+  }
+
+  requestAnimationFrame(animateSpin);
+}
+
+function adjustWheelToWinner(winnerName) {
+  let totalTickets = wheelSegments.reduce(
+    (sum, segment) => sum + segment.tickets,
+    0
+  );
+  let currentAngle = 0;
+
+  for (let segment of wheelSegments) {
+    let segmentAngle = (segment.tickets / totalTickets) * 2 * Math.PI;
+    if (segment.name === winnerName) {
+      // Adjust the angle to make this segment land at the top
+      angle = -currentAngle - segmentAngle / 2;
+      break;
+    }
+    currentAngle += segmentAngle;
+  }
+
+  drawWheel();
+}
+
+function finalizeWinner(winnerName) {
   winners.push(winnerName);
 
   const winnerElement = document.getElementById('winnerResult');
@@ -151,9 +208,6 @@ function pickWinner() {
 
   document.getElementById('pickWinnerBtn').disabled = false;
   document.getElementById('pickWinnerBtn').textContent = 'Pick again?';
-
-  // updateVisualisation();
-  updateWheelSegments();
 }
 
 // 4. Event Listeners
@@ -179,7 +233,7 @@ let ctx = wheelCanvas.getContext('2d');
 let wheelSegments = []; // Will store objects with name and ticket count
 let spinning = false;
 let angle = 0;
-let spinDuration = 5000; // 5 seconds of spinning
+let spinDuration = 5700; // 5 seconds of spinning
 let spinSpeed = 30; // Initial spin speed
 let spinAcceleration = 0.98; // Slows down over time
 let winner = null;
@@ -224,54 +278,6 @@ function drawWheel() {
     currentAngle = endAngle;
   });
 }
-
-function spinWheel() {
-  if (spinning) return;
-
-  spinning = true;
-  let start = performance.now();
-
-  function animateSpin(time) {
-    let elapsed = time - start;
-    let progress = elapsed / spinDuration;
-
-    angle += spinSpeed * (1 - progress);
-    spinSpeed *= spinAcceleration;
-
-    drawWheel();
-
-    if (elapsed < spinDuration) {
-      requestAnimationFrame(animateSpin);
-    } else {
-      spinning = false;
-      selectWinner();
-    }
-  }
-
-  requestAnimationFrame(animateSpin);
-}
-
-function selectWinner() {
-  let totalTickets = wheelSegments.reduce(
-    (sum, segment) => sum + segment.tickets,
-    0
-  );
-  let winningTicket = Math.random() * totalTickets;
-  let ticketSum = 0;
-
-  for (let segment of wheelSegments) {
-    ticketSum += segment.tickets;
-    if (winningTicket <= ticketSum) {
-      winner = segment.name;
-      break;
-    }
-  }
-
-  alert(`The winner is: ${winner}!`);
-}
-document.getElementById('pickWinnerBtn').addEventListener('click', function () {
-  spinWheel();
-});
 
 // Example of how to populate wheelSegments
 function updateWheelSegments() {
