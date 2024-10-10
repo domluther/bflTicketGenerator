@@ -129,15 +129,31 @@ button:hover,
 }
 
 .dark-theme .container,
-.dark-theme button,
 .dark-theme .ticket {
   background-color: #555;
   color: white;
 }
 
+/* Dark theme button styles */
+.dark-theme button,
+.dark-theme .primary-btn {
+  background-color: #ff8c00; /* Lighter vibrant color */
+  color: white;
+}
+
 .dark-theme button:hover,
 .dark-theme .primary-btn:hover {
-  background-color: #777;
+  background-color: #de7900; /* Slightly darker on hover */
+}
+
+.dark-theme #toggleVisualisationBtn {
+  background-color: #ff8c00; /* Ensure contrast for the visualisation button */
+}
+
+.dark-theme #toggleVisualisationBtn:hover {
+  background-color: #de7900; /* Hover contrast for the visualisation button */
+}
+
 }
 
 .dark-theme .ticket.highlight {
