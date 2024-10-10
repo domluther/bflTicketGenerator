@@ -90,6 +90,7 @@ function generateTickets() {
   document.getElementById('pickWinnerBtn').textContent = 'Pick a Winner!';
 
   toggleTicketDisplay();
+  toggleWheelDisplay();
   updateWheelSegments();
 }
 
@@ -109,10 +110,20 @@ function selectAndAnimateWinner() {
   animateTicketSelection(winnerName);
 }
 function updateWheelSegments() {
-  wheelSegments = participants.map((p) => ({
+  let segments = participants.map((p) => ({
     name: p.name,
     tickets: p.tickets,
   }));
+
+  // Shuffle the array using Fisher-Yates algorithm
+  for (let i = segments.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [segments[i], segments[j]] = [segments[j], segments[i]];
+  }
+
+  // Assign the shuffled array to wheelSegments
+  wheelSegments = segments;
+
   drawWheel();
 }
 
@@ -239,11 +250,23 @@ document
   .getElementById('showTicketsToggle')
   .addEventListener('change', toggleTicketDisplay);
 
+document
+  .getElementById('showWheelToggle')
+  .addEventListener('change', toggleWheelDisplay);
+
 // 5. Initial Setup
 function toggleTicketDisplay() {
   const showTickets = document.getElementById('showTicketsToggle').checked;
   const ticketContainer = document.getElementById('ticketContainer');
   ticketContainer.style.display = showTickets ? 'flex' : 'none';
+}
+
+function toggleWheelDisplay() {
+  const showTickets = document.getElementById('showWheelToggle').checked;
+  const visualisationContainer = document.getElementById(
+    'visualisationContainer'
+  );
+  visualisationContainer.style.display = showTickets ? 'flex' : 'none';
 }
 
 function toggleTheme() {

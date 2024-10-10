@@ -43,6 +43,10 @@
         </div>
 
         <div class="toggle-container">
+          <label for="showWheelToggle">
+            <input type="checkbox" id="showWheelToggle" checked />
+            Show Wheel
+          </label>
           <label for="showTicketsToggle">
             <input type="checkbox" id="showTicketsToggle" checked />
             Show Tickets
@@ -70,7 +74,7 @@
       </div>
       <div id="winnerResult" class="hidden"></div>
 
-      <div id="visualisationContainer" style="display">
+      <div id="visualisationContainer" style="display: none">
         <!-- <canvas id="ticketChart"></canvas> -->
         <canvas id="wheelCanvas" width="500" height="500"></canvas>
       </div>
