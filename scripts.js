@@ -107,6 +107,32 @@ function selectAndAnimateWinner() {
 
   // Start the ticket highlight animation
   animateTicketSelection(winnerName);
+}
+function updateWheelSegments() {
+  wheelSegments = participants.map((p) => ({
+    name: p.name,
+    tickets: p.tickets,
+  }));
+  drawWheel();
+}
+
+function selectAndAnimateWinner() {
+  if (tickets.length === 0) {
+    alert('All tickets have been drawn!');
+    return;
+  }
+
+  document.getElementById('pickWinnerBtn').disabled = true;
+
+  // Update wheel segments before selecting a new winner
+  updateWheelSegments();
+
+  // Select the winner using tickets
+  const winningTicket = Math.floor(Math.random() * tickets.length);
+  const winnerName = tickets[winningTicket];
+
+  // Start the ticket highlight animation
+  animateTicketSelection(winnerName);
 
   // Start the wheel spin animation
   spinWheel(winnerName);
@@ -138,29 +164,29 @@ function spinWheel(winnerName) {
 
   spinning = true;
   let start = performance.now();
+  let targetAngle = calculateTargetAngle(winnerName);
+  let initialAngle = angle;
+  let totalRotation = 10 * Math.PI + (targetAngle - initialAngle);
 
   function animateSpin(time) {
     let elapsed = time - start;
     let progress = elapsed / spinDuration;
 
-    angle += spinSpeed * (1 - progress);
-    spinSpeed *= spinAcceleration;
-
-    drawWheel();
-
-    if (elapsed < spinDuration) {
+    if (progress < 1) {
+      let easeProgress = 1 - Math.pow(1 - progress, 3);
+      angle = initialAngle + totalRotation * easeProgress;
+      drawWheel();
       requestAnimationFrame(animateSpin);
     } else {
       spinning = false;
-      // Ensure the wheel lands on the pre-selected winner
-      adjustWheelToWinner(winnerName);
+      angle = targetAngle;
+      drawWheel();
     }
   }
 
   requestAnimationFrame(animateSpin);
 }
-
-function adjustWheelToWinner(winnerName) {
+function calculateTargetAngle(winnerName) {
   let totalTickets = wheelSegments.reduce(
     (sum, segment) => sum + segment.tickets,
     0
@@ -170,14 +196,12 @@ function adjustWheelToWinner(winnerName) {
   for (let segment of wheelSegments) {
     let segmentAngle = (segment.tickets / totalTickets) * 2 * Math.PI;
     if (segment.name === winnerName) {
-      // Adjust the angle to make this segment land at the top
-      angle = -currentAngle - segmentAngle / 2;
-      break;
+      // Calculate the angle that puts this segment at the top
+      return -currentAngle - segmentAngle / 2;
     }
     currentAngle += segmentAngle;
   }
-
-  drawWheel();
+  return 0; // Default to 0 if winner not found
 }
 
 function finalizeWinner(winnerName) {
@@ -277,13 +301,4 @@ function drawWheel() {
 
     currentAngle = endAngle;
   });
-}
-
-// Example of how to populate wheelSegments
-function updateWheelSegments() {
-  wheelSegments = participants.map((p) => ({
-    name: p.name,
-    tickets: p.tickets,
-  }));
-  drawWheel();
 }
