@@ -323,5 +323,25 @@ function drawWheel() {
     ctx.restore();
 
     currentAngle = endAngle;
+
+    // Draw the pointer
+    drawPointer();
   });
+}
+
+function drawPointer() {
+  ctx.save();
+  // Start on the right hand side of the wheel in the middle
+  ctx.translate(wheelCanvas.width, wheelCanvas.height / 2);
+
+  // Draw a circle for the pointer
+  ctx.beginPath();
+  ctx.arc(0, 0, 15, 0, Math.PI * 2);
+  ctx.fillStyle = 'gold';
+  ctx.fill();
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.restore();
 }
