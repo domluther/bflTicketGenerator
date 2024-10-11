@@ -45,6 +45,8 @@ function generateTickets() {
     if (line.trim() !== '') {
       const parts = line.split('\t').map((part) => part.trim());
 
+      console.log(mode);
+      console.log(parts);
       // BFL mode (last name, first name, form group, ticket count)
       if (mode === 'bfl' && parts.length === 3) {
         const [lastName, firstName] = parts[0]
@@ -63,6 +65,15 @@ function generateTickets() {
         const name = parts[0];
         const ticketCount = parseInt(parts[1]);
 
+        participants.push({ name, tickets: ticketCount });
+
+        for (let i = 0; i < ticketCount; i++) {
+          tickets.push(name);
+        }
+      } else if (mode === 'name' && parts.length === 1) {
+        console.log('names mode');
+        const name = parts[0];
+        const ticketCount = 1;
         participants.push({ name, tickets: ticketCount });
 
         for (let i = 0; i < ticketCount; i++) {
